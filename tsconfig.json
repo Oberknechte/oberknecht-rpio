@@ -1,6 +1,6 @@
 {
     "include": [
-        "./ts/", "ts/types.ts",
+        "./ts/",
     ],
     "compilerOptions": {
         "downlevelIteration": true,
