@@ -3,9 +3,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.oberknechtRPIO = void 0;
 const child_process_1 = require("child_process");
 const oberknecht_utils_1 = require("oberknecht-utils");
+const j_1 = require("./variables/j");
+const startMockListener_1 = require("./functions/startMockListener");
+function detectPinCtrl() {
+    try {
+        (0, child_process_1.execSync)("pinctrl -h");
+    }
+    catch (e) {
+        return console.error(`${(0, oberknecht_utils_1.stackName)("Oberknecht-RPIO")[2]} System not supported`);
+    }
+    j_1.j.systemSupported = true;
+}
 class oberknechtRPIO {
-    static setGPIO(pin, pinOptions) {
+    constructor() {
+        detectPinCtrl();
+        if (j_1.j.systemSupported)
+            (0, startMockListener_1.startMockListener)();
+    }
+    setGPIO = (pin, pinOptions) => {
         let cmdOptions = [];
+        if (!j_1.j.systemSupported)
+            return false;
         switch (pinOptions?.type) {
             case "input":
                 {
@@ -28,14 +46,16 @@ class oberknechtRPIO {
         }
         if (pinOptions.noFunction)
             cmdOptions.push("no");
-        let rcmd = (0, child_process_1.execSync)(`pinctrl -p set GPIO${(0, oberknecht_utils_1.convertToArray)(pin).join("GPIO")} ${cmdOptions.join(" ")}`).toString();
+        let rcmd = (0, child_process_1.execSync)(`pinctrl -p set ${(0, oberknecht_utils_1.convertToArray)(pin)} ${cmdOptions.join(" ")}`).toString();
         if (rcmd.split("\n").length > (0, oberknecht_utils_1.convertToArray)(pin).length) {
             return Error(`Error(s) setting GPIO ${pin} with args ${cmdOptions.join(" ")}`, { cause: { rcmd } });
         }
         return true;
-    }
-    static getGPIO(pin) {
-        let rcmd = (0, child_process_1.execSync)(`pinctrl -p get ${pin ? "GPIO" + pin : ""}`).toString();
+    };
+    getGPIO = (pin) => {
+        if (!j_1.j.systemSupported)
+            return {};
+        let rcmd = (0, child_process_1.execSync)(`pinctrl -p get ${pin ?? ""}`).toString();
         let r = {};
         rcmd.split("\n").forEach((a) => {
             let b = a.trim();
@@ -50,6 +70,13 @@ class oberknechtRPIO {
             };
         });
         return r;
-    }
+    };
+    mock = (pin, cb) => {
+        if (!j_1.j.mockListeners[pin])
+            j_1.j.mockListeners[pin] = [];
+        j_1.j.mockListeners[pin].push(cb);
+        j_1.j.emitter.on(`gpioChange:${pin}`, cb);
+    };
+    unMock = (pin, cb) => { };
 }
 exports.oberknechtRPIO = oberknechtRPIO;

@@ -12,7 +12,16 @@ export declare type getPinEntry = {
     type: "ip" | "op";
     state: 0 | 1;
 };
+export declare type mockCallbackType = {
+    value: number;
+    pinValue: number;
+    pin: string;
+    time: number;
+};
 export declare class oberknechtRPIO {
-    static setGPIO(pin: number | number[] | string | string[], pinOptions: pinOptions): true | Error;
-    static getGPIO(pin?: number): Record<string, getPinEntry>;
+    constructor();
+    setGPIO: (pin: number | number[] | string | string[], pinOptions: pinOptions) => boolean | Error;
+    getGPIO: (pin?: string | number) => Record<string, getPinEntry>;
+    mock: (pin: string, cb: (data: mockCallbackType) => {}) => void;
+    unMock: (pin: string | number, cb: Function) => void;
 }

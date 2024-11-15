@@ -1,6 +1,6 @@
 {
   "name": "oberknecht-rpio",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "",
   "main": "./js/index.js",
   "scripts": {
@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/Oberknechte/oberknecht-rpio#readme",
   "devDependencies": {
-    "@types/node": "^22.9.0"
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3"
   },
   "dependencies": {
+    "oberknecht-emitters": "^1.1.5",
     "oberknecht-utils": "^1.9.8"
   }
 }

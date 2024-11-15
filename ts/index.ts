@@ -1,5 +1,8 @@
 import { execSync } from "child_process";
-import { convertToArray } from "oberknecht-utils";
+import { convertToArray, stackName } from "oberknecht-utils";
+import { oberknechtEmitter } from "oberknecht-emitters";
+import { j } from "./variables/j";
+import { startMockListener } from "./functions/startMockListener";
 
 export type pinOptions = (
   | {
@@ -20,12 +23,38 @@ export type getPinEntry = {
   state: 0 | 1;
 };
 
+export type mockCallbackType = {
+  value: number;
+  pinValue: number;
+  pin: string;
+  time: number;
+}
+
+function detectPinCtrl() {
+  try {
+    execSync("pinctrl -h");
+  } catch (e) {
+    return console.error(
+      `${stackName("Oberknecht-RPIO")[2]} System not supported`
+    );
+  }
+
+  j.systemSupported = true;
+}
+
 export class oberknechtRPIO {
-  static setGPIO(
+  constructor() {
+    detectPinCtrl();
+    if (j.systemSupported) startMockListener();
+  }
+
+  setGPIO = (
     pin: number | number[] | string | string[],
     pinOptions: pinOptions
-  ) {
+  ) => {
     let cmdOptions = [];
+
+    if (!j.systemSupported) return false;
 
     switch (pinOptions?.type) {
       case "input":
@@ -50,9 +79,7 @@ export class oberknechtRPIO {
     if (pinOptions.noFunction) cmdOptions.push("no");
 
     let rcmd = execSync(
-      `pinctrl -p set GPIO${convertToArray(pin).join("GPIO")} ${cmdOptions.join(
-        " "
-      )}`
+      `pinctrl -p set ${convertToArray(pin)} ${cmdOptions.join(" ")}`
     ).toString();
 
     if (rcmd.split("\n").length > convertToArray(pin).length) {
@@ -63,10 +90,12 @@ export class oberknechtRPIO {
     }
 
     return true;
-  }
+  };
 
-  static getGPIO(pin?: number): Record<string, getPinEntry> {
-    let rcmd = execSync(`pinctrl -p get ${pin ? "GPIO" + pin : ""}`).toString();
+  getGPIO = (pin?: string | number): Record<string, getPinEntry> => {
+    if (!j.systemSupported) return {};
+
+    let rcmd = execSync(`pinctrl -p get ${pin ?? ""}`).toString();
     let r: Record<string, getPinEntry> = {};
 
     rcmd.split("\n").forEach((a) => {
@@ -85,5 +114,16 @@ export class oberknechtRPIO {
     });
 
     return r;
-  }
+  };
+
+  mock = (pin: string, cb: (data: mockCallbackType) => {}) => {
+    if (!j.mockListeners[pin]) j.mockListeners[pin] = [];
+    j.mockListeners[pin].push(cb);
+
+    j.emitter.on(`gpioChange:${pin}`, cb);
+  };
+
+  unMock = (pin: string | number, cb: Function) => {};
+
+  // pretendMock = () => {}
 }
