@@ -15,11 +15,12 @@ function detectPinCtrl() {
     j_1.j.systemSupported = true;
 }
 class oberknechtRPIO {
-    constructor() {
+    constructor() { }
+    init = () => {
         detectPinCtrl();
         if (j_1.j.systemSupported)
             (0, startMockListener_1.startMockListener)();
-    }
+    };
     setGPIO = (pin, pinOptions) => {
         let cmdOptions = [];
         if (!j_1.j.systemSupported)

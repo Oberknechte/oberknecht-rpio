@@ -28,7 +28,7 @@ export type mockCallbackType = {
   pinValue: number;
   pin: string;
   time: number;
-}
+};
 
 function detectPinCtrl() {
   try {
@@ -43,10 +43,12 @@ function detectPinCtrl() {
 }
 
 export class oberknechtRPIO {
-  constructor() {
+  constructor() {}
+
+  init = () => {
     detectPinCtrl();
     if (j.systemSupported) startMockListener();
-  }
+  };
 
   setGPIO = (
     pin: number | number[] | string | string[],

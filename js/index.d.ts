@@ -20,6 +20,7 @@ export declare type mockCallbackType = {
 };
 export declare class oberknechtRPIO {
     constructor();
+    init: () => void;
     setGPIO: (pin: number | number[] | string | string[], pinOptions: pinOptions) => boolean | Error;
     getGPIO: (pin?: string | number) => Record<string, getPinEntry>;
     mock: (pin: string, cb: (data: mockCallbackType) => {}) => void;
