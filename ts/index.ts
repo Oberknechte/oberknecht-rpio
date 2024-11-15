@@ -12,10 +12,10 @@ export type pinOptions = (
     }
   | {
       type: "output";
-      value: boolean | 0 | 1;
+      value?: boolean | 0 | 1;
     }
 ) & {
-  noFunction: boolean;
+  noFunction?: boolean;
 };
 
 export type getPinEntry = {
