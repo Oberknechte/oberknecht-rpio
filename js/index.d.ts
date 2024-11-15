@@ -4,9 +4,9 @@ export declare type pinOptions = ({
     pullDown?: boolean;
 } | {
     type: "output";
-    value: boolean | 0 | 1;
+    value?: boolean | 0 | 1;
 }) & {
-    noFunction: boolean;
+    noFunction?: boolean;
 };
 export declare type getPinEntry = {
     type: "ip" | "op";
