@@ -78,6 +78,11 @@ class oberknechtRPIO {
         j_1.j.mockListeners[pin].push(cb);
         j_1.j.emitter.on(`gpioChange:${pin}`, cb);
     };
-    unMock = (pin, cb) => { };
+    unMock = (pin, cb) => {
+        if (!j_1.j.mockListeners[pin])
+            return;
+        j_1.j.mockListeners[pin] = j_1.j.mockListeners[pin].filter((a) => a !== cb);
+        j_1.j.emitter.removeListener(`gpioChange:${pin}`, cb);
+    };
 }
 exports.oberknechtRPIO = oberknechtRPIO;

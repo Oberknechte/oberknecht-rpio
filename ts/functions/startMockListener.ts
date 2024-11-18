@@ -5,7 +5,7 @@ let lastStates: Record<string, { value: number; timestamp: number }> = {};
 let mockTimeouts: Record<string, NodeJS.Timeout> = {};
 
 function fireMockDelay(pin) {
-  console.log("fire mock delay", pin);
+  // console.log("fire mock delay", pin);
 
   if (mockTimeouts[pin]) mockTimeouts[pin].refresh();
   else
@@ -29,7 +29,7 @@ function fireMockOutput(pin) {
 
   //   0 = falling, 1 = rising
 
-  console.log("mock fire", pin, value);
+  // console.log("mock fire", pin, value);
 
   j.emitter.emit(["gpioChange", `gpioChange:${pin}`], {
     value: value,

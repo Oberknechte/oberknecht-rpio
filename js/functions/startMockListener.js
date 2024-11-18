@@ -6,7 +6,7 @@ const j_1 = require("../variables/j");
 let lastStates = {};
 let mockTimeouts = {};
 function fireMockDelay(pin) {
-    console.log("fire mock delay", pin);
+    // console.log("fire mock delay", pin);
     if (mockTimeouts[pin])
         mockTimeouts[pin].refresh();
     else
@@ -26,7 +26,7 @@ function fireMockOutput(pin) {
     if (pinDat?.option === "pu")
         value = value === 1 ? 0 : 1;
     //   0 = falling, 1 = rising
-    console.log("mock fire", pin, value);
+    // console.log("mock fire", pin, value);
     j_1.j.emitter.emit(["gpioChange", `gpioChange:${pin}`], {
         value: value,
         pinValue: value,
