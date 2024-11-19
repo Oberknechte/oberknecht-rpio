@@ -15,4 +15,5 @@ export class j {
     string,
     { state: number; option: "pu" | "pd" | "nf" }
   > = {};
+  static stdOutNum = 0;
 }

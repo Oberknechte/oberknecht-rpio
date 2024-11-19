@@ -4,7 +4,6 @@ import { j } from "../variables/j";
 let lastStates: Record<string, { value: number; timestamp: number }> = {};
 let mockTimeouts: Record<string, NodeJS.Timeout> = {};
 
-let stdOutNum = 0;
 
 function fireMockDelay(pin, stdNum) {
   // console.log("fire mock delay", pin);
@@ -79,9 +78,9 @@ export function startMockListener() {
     });
 
     Object.keys(msgUpdates).forEach((pin) => {
-      fireMockDelay(pin, stdOutNum);
+      fireMockDelay(pin, j.stdOutNum);
     });
 
-    stdOutNum++;
+    j.stdOutNum++;
   });
 }

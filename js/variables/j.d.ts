@@ -14,4 +14,5 @@ export declare class j {
         state: number;
         option: "pu" | "pd" | "nf";
     }>;
+    static stdOutNum: number;
 }
