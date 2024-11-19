@@ -5,16 +5,17 @@ const child_process_1 = require("child_process");
 const j_1 = require("../variables/j");
 let lastStates = {};
 let mockTimeouts = {};
-function fireMockDelay(pin) {
+let stdOutNum = 0;
+function fireMockDelay(pin, stdNum) {
     // console.log("fire mock delay", pin);
     if (mockTimeouts[pin])
         mockTimeouts[pin].refresh();
     else
         mockTimeouts[pin] = setTimeout(() => {
-            fireMockOutput(pin);
+            fireMockOutput(pin, stdNum);
         }, j_1.j.mockFireDelayMS);
 }
-function fireMockOutput(pin) {
+function fireMockOutput(pin, stdNum) {
     let pinDat = j_1.j.pinStates[pin];
     let value = lastStates[pin].value;
     if (value === j_1.j.pinStates[pin]?.state)
@@ -31,6 +32,7 @@ function fireMockOutput(pin) {
         value: value,
         pinValue: value,
         pin: pin,
+        stdNum: stdNum,
     });
 }
 function startMockListener() {
@@ -63,8 +65,9 @@ function startMockListener() {
             msgUpdates[pin] = lastStates[pin];
         });
         Object.keys(msgUpdates).forEach((pin) => {
-            fireMockDelay(pin);
+            fireMockDelay(pin, stdOutNum);
         });
+        stdOutNum++;
     });
 }
 exports.startMockListener = startMockListener;
