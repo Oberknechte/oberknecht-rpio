@@ -16,6 +16,7 @@ function detectPinCtrl() {
 }
 class oberknechtRPIO {
     constructor() { }
+    emitter = j_1.j.emitter;
     init = () => {
         detectPinCtrl();
         if (j_1.j.systemSupported)

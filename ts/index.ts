@@ -45,6 +45,8 @@ function detectPinCtrl() {
 export class oberknechtRPIO {
   constructor() {}
 
+  emitter: oberknechtEmitter = j.emitter;
+
   init = () => {
     detectPinCtrl();
     if (j.systemSupported) startMockListener();
