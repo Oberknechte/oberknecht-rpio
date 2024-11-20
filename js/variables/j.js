@@ -12,6 +12,5 @@ class j {
     static mockProcess;
     static mockListeners = {};
     static pinStates = {};
-    static stdOutNum = 0;
 }
 exports.j = j;

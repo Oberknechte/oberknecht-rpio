@@ -31,7 +31,7 @@ function fireMockOutput(pin, stdNum) {
         value: value,
         pinValue: value,
         pin: pin,
-        stdNum: stdNum,
+        stdNum: stdNum(),
     });
 }
 function startMockListener() {
@@ -47,7 +47,7 @@ function startMockListener() {
     j_1.j.mockProcess.on("error", (e) => {
         console.error(e);
     });
-    let ignoreNext = false;
+    let stdOutNum = -1;
     j_1.j.mockProcess.stdout.on("data", (stdouts) => {
         let msgUpdates = {};
         stdouts.split("\n").forEach((stdout) => {
@@ -64,9 +64,11 @@ function startMockListener() {
             msgUpdates[pin] = lastStates[pin];
         });
         Object.keys(msgUpdates).forEach((pin) => {
-            fireMockDelay(pin, j_1.j.stdOutNum);
+            fireMockDelay(pin, () => {
+                return stdOutNum;
+            });
         });
-        j_1.j.stdOutNum++;
+        stdOutNum++;
     });
 }
 exports.startMockListener = startMockListener;
