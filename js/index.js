@@ -8,11 +8,12 @@ const startMockListener_1 = require("./functions/startMockListener");
 function detectPinCtrl() {
     try {
         (0, child_process_1.execSync)("pinctrl -h");
+        console.log(`${(0, oberknecht_utils_1.stackName)("Oberknecht-RPIO")[2]} System supported`);
+        j_1.j.systemSupported = true;
     }
     catch (e) {
         return console.error(`${(0, oberknecht_utils_1.stackName)("Oberknecht-RPIO")[2]} System not supported`);
     }
-    j_1.j.systemSupported = true;
 }
 class oberknechtRPIO {
     constructor() { }

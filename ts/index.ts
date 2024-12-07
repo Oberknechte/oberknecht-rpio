@@ -33,13 +33,13 @@ export type mockCallbackType = {
 function detectPinCtrl() {
   try {
     execSync("pinctrl -h");
+    console.log(`${stackName("Oberknecht-RPIO")[2]} System supported`);
+    j.systemSupported = true;
   } catch (e) {
     return console.error(
       `${stackName("Oberknecht-RPIO")[2]} System not supported`
     );
   }
-
-  j.systemSupported = true;
 }
 
 export class oberknechtRPIO {
